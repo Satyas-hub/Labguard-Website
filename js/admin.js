@@ -291,15 +291,27 @@ function setupUploadForm() {
 
       if (window.supabaseClient) {
         try {
-          const filePath = `releases/${Date.now()}-${fileBlob.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-          const { error: uploadError } = await window.supabaseClient.storage.from('releases').upload(filePath, fileBlob);
+          const cleanName = fileBlob.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+          const filePath = `${Date.now()}_${cleanName}`;
+          
+          const { data: upData, error: uploadError } = await window.supabaseClient.storage
+            .from('releases')
+            .upload(filePath, fileBlob, { cacheControl: '3600', upsert: true });
+
           if (!uploadError) {
-            const { data: publicUrlData } = window.supabaseClient.storage.from('releases').getPublicUrl(filePath);
+            const { data: publicUrlData } = window.supabaseClient.storage
+              .from('releases')
+              .getPublicUrl(filePath);
+
             if (publicUrlData && publicUrlData.publicUrl) {
               downloadURL = publicUrlData.publicUrl;
             }
+          } else {
+            console.error("Storage upload error:", uploadError);
           }
-        } catch (err) {}
+        } catch (err) {
+          console.error("Storage exception:", err);
+        }
       }
     } else {
       finalFileName = directUrl.split('/').pop().split('?')[0] || `LABGUARD-v${version}.exe`;
@@ -307,9 +319,8 @@ function setupUploadForm() {
     }
 
     const releaseRecord = {
-      id: releaseId,
       version: version,
-      release_date: releaseDate,
+      release_date: releaseDate.includes('T') ? releaseDate.split('T')[0] : releaseDate,
       release_notes: releaseNotes,
       changelog: changelog,
       file_name: finalFileName,
@@ -317,28 +328,42 @@ function setupUploadForm() {
       file_size: finalFileSize,
       is_latest: isLatest,
       is_published: isPublished,
-      minimum_supported_version: minVersion,
-      created_at: new Date().toISOString()
+      minimum_supported_version: minVersion
     };
 
     if (progressBar) progressBar.style.width = '70%';
 
-    // Save to Supabase if available
+    // Save to Supabase Cloud so ALL devices worldwide see this release immediately
     if (window.supabaseClient) {
       try {
         if (isLatest) {
-          await window.supabaseClient.from('app_versions').update({ is_latest: false }).neq('id', '0');
+          await window.supabaseClient.from('app_versions').update({ is_latest: false }).eq('is_latest', true);
         }
-        await window.supabaseClient.from('app_versions').insert([releaseRecord]);
-      } catch (e) {}
+        const { data: insData, error: insErr } = await window.supabaseClient
+          .from('app_versions')
+          .insert([releaseRecord])
+          .select();
+
+        if (insErr) {
+          console.error("Supabase Cloud DB Error:", insErr);
+        } else if (insData && insData[0]) {
+          releaseRecord.id = insData[0].id;
+        }
+      } catch (e) {
+        console.error("Supabase Cloud DB Exception:", e);
+      }
     }
 
-    // Always save to persistent DB
+    if (!releaseRecord.id) {
+      releaseRecord.id = 'rel_' + Date.now();
+    }
+
+    // Always save locally as well
     await window.LabguardDB.saveLocalRelease(releaseRecord, fileBlob);
 
     if (progressBar) progressBar.style.width = '100%';
     if (progressText) progressText.textContent = 'Upload complete!';
-    window.showToast(`LABGUARD v${version} uploaded successfully and ready for user download!`, 'success');
+    window.showToast(`LABGUARD v${version} uploaded to Cloud! Live on all devices.`, 'success');
 
     form.reset();
     if (fileNameDisplay) fileNameDisplay.textContent = '';

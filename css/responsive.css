@@ -54,9 +54,9 @@
     transform: translateY(-8px) rotate(-45deg);
   }
 
-  /* Compact Navbar for Mobile */
+  /* Ultra-Sleek Compact Navbar for Mobile */
   .navbar {
-    padding: 0.8rem 1rem;
+    padding: 0.65rem 1rem;
   }
 
   .nav-actions {
@@ -64,39 +64,47 @@
   }
 
   .nav-actions .btn {
-    padding: 0.45rem 0.9rem;
-    font-size: 0.82rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.78rem;
     border-radius: 6px;
     font-weight: 600;
   }
 
+  .btn-desktop-text {
+    display: none;
+  }
+
+  .btn-mobile-text {
+    display: inline;
+  }
+
   .btn {
-    padding: 0.65rem 1.35rem;
-    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.88rem;
   }
 
   .crafted-hero-pill {
-    padding: 0.45rem 1rem;
-    font-size: 0.82rem;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.8rem;
   }
 
   .crafted-hero-pill .pill-text {
-    font-size: 0.84rem;
+    font-size: 0.82rem;
   }
 
   .nav-menu {
     position: fixed;
     left: -100%;
-    top: 70px;
+    top: 65px;
     flex-direction: column;
     background: var(--bg-primary);
     width: 100%;
-    height: calc(100vh - 70px);
+    height: calc(100vh - 65px);
     text-align: center;
     transition: 0.3s ease-in-out;
     box-shadow: var(--shadow-lg);
-    padding: 3rem 0;
-    gap: 2rem;
+    padding: 2.5rem 0;
+    gap: 1.8rem;
   }
 
   .nav-menu.active {
@@ -104,7 +112,7 @@
   }
 
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2.4rem;
   }
 
   .release-item-card {
@@ -131,24 +139,39 @@
 
 @media (max-width: 480px) {
   .container {
-    padding: 0 1rem;
+    padding: 0 0.85rem;
+  }
+
+  .logo-img {
+    height: 32px;
   }
 
   .logo-title {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .logo-subtitle {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
+  }
+
+  .nav-actions {
+    gap: 0.35rem;
   }
 
   .nav-actions .btn {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.78rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.72rem;
+    border-radius: 5px;
+  }
+
+  .bar {
+    width: 20px;
+    height: 2px;
+    margin: 4px auto;
   }
 
   .hero-title {
-    font-size: 2.1rem;
+    font-size: 2rem;
   }
 
   .hero-buttons {
@@ -158,7 +181,7 @@
 
   .hero-buttons .btn {
     width: 100%;
-    padding: 0.7rem 1.25rem;
+    padding: 0.65rem 1.15rem;
   }
 
   .release-meta-list {

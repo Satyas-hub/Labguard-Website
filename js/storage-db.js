@@ -205,9 +205,11 @@ async function setLatestRelease(id) {
   const sb = getSupabase();
   if (sb) {
     try {
-      await sb.from('app_versions').update({ is_latest: false }).neq('id', id);
+      await sb.from('app_versions').update({ is_latest: false }).eq('is_latest', true);
       await sb.from('app_versions').update({ is_latest: true }).eq('id', id);
-    } catch (e) {}
+    } catch (e) {
+      console.error("Supabase setLatest error:", e);
+    }
   }
 
   let local = JSON.parse(localStorage.getItem('labguard_local_releases') || '[]');
