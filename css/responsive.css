@@ -54,14 +54,44 @@
     transform: translateY(-8px) rotate(-45deg);
   }
 
+  /* Compact Navbar for Mobile */
+  .navbar {
+    padding: 0.8rem 1rem;
+  }
+
+  .nav-actions {
+    gap: 0.5rem;
+  }
+
+  .nav-actions .btn {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.82rem;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+
+  .btn {
+    padding: 0.65rem 1.35rem;
+    font-size: 0.9rem;
+  }
+
+  .crafted-hero-pill {
+    padding: 0.45rem 1rem;
+    font-size: 0.82rem;
+  }
+
+  .crafted-hero-pill .pill-text {
+    font-size: 0.84rem;
+  }
+
   .nav-menu {
     position: fixed;
     left: -100%;
-    top: 80px;
+    top: 70px;
     flex-direction: column;
     background: var(--bg-primary);
     width: 100%;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 70px);
     text-align: center;
     transition: 0.3s ease-in-out;
     box-shadow: var(--shadow-lg);
@@ -74,7 +104,7 @@
   }
 
   .hero-title {
-    font-size: 2.75rem;
+    font-size: 2.5rem;
   }
 
   .release-item-card {
@@ -104,16 +134,31 @@
     padding: 0 1rem;
   }
 
+  .logo-title {
+    font-size: 1.1rem;
+  }
+
+  .logo-subtitle {
+    font-size: 0.65rem;
+  }
+
+  .nav-actions .btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.78rem;
+  }
+
   .hero-title {
-    font-size: 2.25rem;
+    font-size: 2.1rem;
   }
 
   .hero-buttons {
     flex-direction: column;
+    gap: 0.75rem;
   }
 
   .hero-buttons .btn {
     width: 100%;
+    padding: 0.7rem 1.25rem;
   }
 
   .release-meta-list {
@@ -121,3 +166,4 @@
     gap: 0.5rem;
   }
 }
+
