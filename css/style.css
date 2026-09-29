@@ -924,3 +924,103 @@ button, input, select, textarea {
   color: var(--navy-deep);
   margin-bottom: 0.5rem;
 }
+
+/* ==========================================================================
+   CRAFTED BY SAI KUMAR - PREMIUM HIGHLIGHT STYLES
+   ========================================================================== */
+.crafted-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.12), rgba(58, 134, 239, 0.18));
+  border: 1.5px solid rgba(0, 242, 254, 0.45);
+  padding: 0.45rem 1.1rem;
+  border-radius: 50px;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+  backdrop-filter: blur(8px);
+  animation: pulseGlow 3s ease-in-out infinite alternate;
+}
+
+.crafted-hero-pill .pill-sparkle {
+  font-size: 1rem;
+  filter: drop-shadow(0 0 6px #00f2fe);
+}
+
+.crafted-hero-pill .pill-text {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
+.crafted-hero-pill strong {
+  color: #00f2fe;
+  font-weight: 800;
+  text-shadow: 0 0 12px rgba(0, 242, 254, 0.6);
+  letter-spacing: 0.5px;
+}
+
+.crafted-by-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.crafted-name {
+  font-weight: 800;
+  background: linear-gradient(90deg, #00f2fe, #4facfe, #00f2fe);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShine 3s linear infinite;
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+}
+
+.creator-card-highlight {
+  background: linear-gradient(135deg, rgba(10, 25, 47, 0.9), rgba(15, 34, 64, 0.95));
+  border: 1.5px solid rgba(0, 242, 254, 0.4);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: 0 8px 30px rgba(0, 242, 254, 0.15);
+  text-align: center;
+  margin: 3rem 0;
+}
+
+.creator-avatar-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan-primary), var(--electric-blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  margin: 0 auto 1.2rem;
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+    border-color: rgba(0, 242, 254, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 22px rgba(0, 242, 254, 0.45);
+    border-color: rgba(0, 242, 254, 0.8);
+  }
+}
+
+@keyframes textShine {
+  to {
+    background-position: 200% center;
+  }
+}
+
