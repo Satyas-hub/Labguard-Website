@@ -21,6 +21,7 @@ async function loadLatestReleaseOnHome() {
 
     let latestRel = data.find(r => r.is_latest) || data[0];
     const directDownloadHref = await window.LabguardDB.getDownloadUrlForRelease(latestRel);
+    const hasValidUrl = directDownloadHref && directDownloadHref.startsWith('http');
 
     const changelogHtml = latestRel.changelog
       ? latestRel.changelog.split('\n').map(item => `<li>${item.trim()}</li>`).join('')
@@ -40,9 +41,15 @@ async function loadLatestReleaseOnHome() {
           <ul>${changelogHtml}</ul>
         </div>
         <div class="release-actions">
-          <a href="${directDownloadHref}" class="btn btn-primary download-btn" data-release-id="${latestRel.id}" data-version="${latestRel.version}" target="_blank" download="${latestRel.file_name || 'LABGUARD-Setup'}">
-            <span>📥</span> Download for Windows
-          </a>
+          ${hasValidUrl ? `
+            <a href="${directDownloadHref}" class="btn btn-primary download-btn" data-release-id="${latestRel.id}" data-version="${latestRel.version}" target="_blank" rel="noopener noreferrer">
+              <span>📥</span> Download for Windows
+            </a>
+          ` : `
+            <button class="btn btn-primary" onclick="alert('The installer file URL is being updated by the administrator. Please check back shortly!')">
+              <span>📥</span> Download for Windows
+            </button>
+          `}
           <a href="release-notes.html" class="btn btn-secondary">View Release Notes</a>
         </div>
       </div>
@@ -88,6 +95,7 @@ async function loadDownloadsPage() {
     for (const rel of data) {
       const isLatest = rel.is_latest;
       const downloadHref = await window.LabguardDB.getDownloadUrlForRelease(rel);
+      const hasValidUrl = downloadHref && downloadHref.startsWith('http');
 
       html += `
         <div class="release-item-card">
@@ -104,9 +112,15 @@ async function loadDownloadsPage() {
             <p class="release-item-desc">${rel.release_notes || 'Enterprise lab security & protection package.'}</p>
           </div>
           <div class="release-item-actions">
-            <a href="${downloadHref}" class="btn btn-primary btn-sm download-btn" data-release-id="${rel.id}" data-version="${rel.version}" target="_blank" download="${rel.file_name || 'LABGUARD-Setup'}">
-              📥 Download
-            </a>
+            ${hasValidUrl ? `
+              <a href="${downloadHref}" class="btn btn-primary btn-sm download-btn" data-release-id="${rel.id}" data-version="${rel.version}" target="_blank" rel="noopener noreferrer">
+                📥 Download
+              </a>
+            ` : `
+              <button class="btn btn-primary btn-sm" onclick="alert('Download URL is being updated.')">
+                📥 Download
+              </button>
+            `}
             <a href="release-notes.html" class="btn btn-secondary btn-sm">
               📄 Details
             </a>
@@ -149,6 +163,7 @@ async function loadReleaseNotesPage() {
     let html = '';
     for (const rel of data) {
       const downloadHref = await window.LabguardDB.getDownloadUrlForRelease(rel);
+      const hasValidUrl = downloadHref && (downloadHref.startsWith('http') || downloadHref.startsWith('blob:'));
       const changelogItems = rel.changelog
         ? rel.changelog.split('\n').map(item => `<li>${item.trim()}</li>`).join('')
         : '<li>General stability improvements and bug fixes.</li>';
@@ -166,9 +181,15 @@ async function loadReleaseNotesPage() {
               <h5>Changelog</h5>
               <ul>${changelogItems}</ul>
               <div style="margin-top: 1.5rem;">
-                <a href="${downloadHref}" class="btn btn-secondary btn-sm download-btn" data-release-id="${rel.id}" data-version="${rel.version}" target="_blank" download="${rel.file_name || 'LABGUARD-Setup'}">
-                  📥 Download v${rel.version} (${window.formatFileSize(rel.file_size)})
-                </a>
+                ${hasValidUrl ? `
+                  <a href="${downloadHref}" class="btn btn-secondary btn-sm download-btn" data-release-id="${rel.id}" data-version="${rel.version}" target="_blank" rel="noopener noreferrer">
+                    📥 Download v${rel.version} (${window.formatFileSize(rel.file_size)})
+                  </a>
+                ` : `
+                  <button class="btn btn-secondary btn-sm" onclick="alert('The download link for this version is being configured in the Admin Portal.')">
+                    ⏳ Link Updating
+                  </button>
+                `}
               </div>
             </div>
           </div>

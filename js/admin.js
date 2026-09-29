@@ -247,7 +247,13 @@ function setupUploadForm() {
     dropzone.addEventListener('click', () => fileInput.click());
     fileInput.addEventListener('change', () => {
       if (fileInput.files.length > 0) {
-        fileNameDisplay.textContent = `Selected: ${fileInput.files[0].name} (${window.formatFileSize(fileInput.files[0].size)})`;
+        const file = fileInput.files[0];
+        const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+        fileNameDisplay.textContent = `Selected: ${file.name} (${window.formatFileSize(file.size)})`;
+
+        if (file.size > 50 * 1024 * 1024) {
+          window.showToast(`⚠️ File size is ${sizeMB}MB (Supabase Free limit is 50MB). Please use Option 1 (Direct Download Link from Google Drive / GitHub) for 100% reliable downloads.`, 'warning');
+        }
       }
     });
   }
@@ -263,7 +269,22 @@ function setupUploadForm() {
     const isPublished = document.getElementById('inputIsPublished') ? document.getElementById('inputIsPublished').checked : true;
     const isLatest = document.getElementById('inputIsLatest') ? document.getElementById('inputIsLatest').checked : true;
     const directUrlInput = document.getElementById('inputDirectUrl');
-    const directUrl = directUrlInput ? directUrlInput.value.trim() : '';
+    let directUrl = directUrlInput ? directUrlInput.value.trim() : '';
+
+    // Convert Google Drive sharing link to direct download link automatically
+    if (directUrl.includes('drive.google.com')) {
+      const match1 = directUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      const match2 = directUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      const fileId = (match1 && match1[1]) || (match2 && match2[1]);
+      if (fileId) {
+        directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+      }
+    } else if (directUrl.includes('dropbox.com')) {
+      directUrl = directUrl.replace('?dl=0', '?dl=1');
+      if (!directUrl.includes('dl=1')) {
+        directUrl += (directUrl.includes('?') ? '&' : '?') + 'dl=1';
+      }
+    }
 
     const hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
 
@@ -276,21 +297,28 @@ function setupUploadForm() {
     submitBtn.disabled = true;
     if (progressContainer) progressContainer.style.display = 'block';
     if (progressBar) progressBar.style.width = '30%';
-    if (progressText) progressText.textContent = 'Processing upload...';
+    if (progressText) progressText.textContent = 'Processing release package...';
 
-    const releaseId = 'rel_' + Date.now();
     let downloadURL = directUrl;
     let finalFileName = 'LABGUARD-Setup';
     let finalFileSize = 0;
     let fileBlob = null;
 
-    if (hasFile) {
+    if (hasFile && !directUrl) {
       fileBlob = fileInput.files[0];
       finalFileName = fileBlob.name;
       finalFileSize = fileBlob.size;
 
+      if (fileBlob.size > 50 * 1024 * 1024) {
+        submitBtn.disabled = false;
+        if (progressContainer) progressContainer.style.display = 'none';
+        window.showToast(`File size (${(fileBlob.size / (1024*1024)).toFixed(1)}MB) exceeds 50MB Supabase Storage limit. Please paste a direct download link (Google Drive / GitHub Releases / Mediafire) into Option 1.`, 'error');
+        return;
+      }
+
       if (window.supabaseClient) {
         try {
+          if (progressText) progressText.textContent = 'Uploading file to Supabase Cloud Storage...';
           const cleanName = fileBlob.name.replace(/[^a-zA-Z0-9._-]/g, '_');
           const filePath = `${Date.now()}_${cleanName}`;
           
@@ -308,14 +336,30 @@ function setupUploadForm() {
             }
           } else {
             console.error("Storage upload error:", uploadError);
+            window.showToast(`Storage Upload Error: ${uploadError.message}`, 'error');
+            submitBtn.disabled = false;
+            if (progressContainer) progressContainer.style.display = 'none';
+            return;
           }
         } catch (err) {
           console.error("Storage exception:", err);
         }
       }
     } else {
-      finalFileName = directUrl.split('/').pop().split('?')[0] || `LABGUARD-v${version}.exe`;
-      finalFileSize = 50 * 1024 * 1024;
+      if (hasFile) {
+        finalFileName = fileInput.files[0].name;
+        finalFileSize = fileInput.files[0].size;
+      } else {
+        finalFileName = directUrl.split('/').pop().split('?')[0] || `LABGUARD-v${version}.zip`;
+        finalFileSize = 75 * 1024 * 1024;
+      }
+    }
+
+    if (!downloadURL) {
+      submitBtn.disabled = false;
+      if (progressContainer) progressContainer.style.display = 'none';
+      window.showToast('Please provide a valid download URL or file under 50MB.', 'error');
+      return;
     }
 
     const releaseRecord = {
@@ -324,7 +368,7 @@ function setupUploadForm() {
       release_notes: releaseNotes,
       changelog: changelog,
       file_name: finalFileName,
-      download_url: downloadURL || '',
+      download_url: downloadURL,
       file_size: finalFileSize,
       is_latest: isLatest,
       is_published: isPublished,

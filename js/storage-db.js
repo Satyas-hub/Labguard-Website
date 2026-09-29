@@ -120,8 +120,9 @@ async function fetchAllReleases() {
 }
 
 async function getDownloadUrlForRelease(release) {
-  if (release.download_url && release.download_url.startsWith('http') && !release.download_url.includes('undefined')) {
-    return release.download_url;
+  if (!release) return null;
+  if (release.download_url && typeof release.download_url === 'string' && release.download_url.trim().startsWith('http')) {
+    return release.download_url.trim();
   }
 
   const db = await openLocalDB();
@@ -135,17 +136,17 @@ async function getDownloadUrlForRelease(release) {
             const url = URL.createObjectURL(req.result.blob);
             resolve(url);
           } else {
-            resolve(release.download_url || '#');
+            resolve(null);
           }
         };
-        req.onerror = () => resolve(release.download_url || '#');
+        req.onerror = () => resolve(null);
       } catch (err) {
-        resolve(release.download_url || '#');
+        resolve(null);
       }
     });
   }
 
-  return release.download_url || '#';
+  return null;
 }
 
 async function deleteRelease(id) {
