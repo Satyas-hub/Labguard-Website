@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Downloads & Previous Versions | LABGUARD System Protection</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- HEADER & NAVIGATION -->
+  <header class="header">
+    <div class="container navbar">
+      <a href="index.html" class="brand-logo">
+        <img src="assets/labguard-logo.png" alt="LABGUARD Logo" class="logo-img" onerror="this.style.display='none'">
+        <div class="logo-text">
+          <span class="logo-title">LABGUARD</span>
+          <span class="logo-subtitle">System Protection</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="downloads.html" class="nav-link active">Downloads</a>
+        <a href="release-notes.html" class="nav-link">Release Notes</a>
+        <a href="about.html" class="nav-link">About</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="downloads.html" class="btn btn-primary">Download Windows App</a>
+        <button class="hamburger" aria-label="Toggle Navigation">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- DOWNLOADS HERO -->
+  <section class="downloads-hero">
+    <div class="container">
+      <h1>Software Downloads</h1>
+      <p>Download the official Windows application builds for LABGUARD System Protection. All releases are securely signed and verified.</p>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS LIST SECTION -->
+  <section class="section">
+    <div class="container">
+      <div class="releases-container" id="downloadsListContainer">
+        <!-- Dynamically loaded from database -->
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo" style="margin-bottom: 1rem;">
+            <img src="assets/labguard-logo.png" alt="LABGUARD Logo" class="logo-img" onerror="this.style.display='none'">
+            <div class="logo-text">
+              <span class="logo-title">LABGUARD</span>
+              <span class="logo-subtitle">System Protection</span>
+            </div>
+          </div>
+          <p>Advanced enterprise computer lab security, system lockdown, and management suite.</p>
+          <p style="color: var(--cyan-primary); font-weight: 600; font-size: 0.9rem;">SECURE LABS • SMARTER TOMORROW</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="downloads.html">Downloads</a></li>
+            <li><a href="release-notes.html">Release Notes</a></li>
+            <li><a href="about.html">About LABGUARD</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="downloads.html">Windows 11 Setup</a></li>
+            <li><a href="downloads.html">Windows 10 Setup</a></li>
+            <li><a href="release-notes.html">Changelog</a></li>
+            <li><a href="downloads.html">Previous Versions</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Administration</h4>
+          <ul>
+            <li><a href="admin-login.html">Admin Portal</a></li>
+            <li><a href="admin-dashboard.html">Dashboard Access</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 LABGUARD Systems. All rights reserved.</p>
+        <a href="admin-login.html" class="footer-admin-link">Administrator Portal Login</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/storage-db.js"></script>
+  <script src="js/releases.js"></script>
+  <script src="js/downloads.js"></script>
+</body>
+</html>

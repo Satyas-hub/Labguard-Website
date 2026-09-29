@@ -1,0 +1,8 @@
+{
+  "name": "labguard-website",
+  "version": "1.0.0",
+  "description": "Official website and download portal for LABGUARD System Protection",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}

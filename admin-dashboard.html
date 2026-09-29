@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | LABGUARD System Protection</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-brand">
+      <img src="assets/labguard-logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+      <div class="logo-text">
+        <span class="logo-title">LABGUARD</span>
+        <span class="logo-subtitle">Admin Control</span>
+      </div>
+    </div>
+
+    <ul class="admin-nav">
+      <li><a href="#" class="admin-nav-link active" data-tab="dashboard"><span>📊 Dashboard</span></a></li>
+      <li><a href="#" class="admin-nav-link" data-tab="releases"><span>📦 Releases</span></a></li>
+      <li><a href="#" class="admin-nav-link" data-tab="upload"><span>⬆️ Upload Release</span></a></li>
+      <li><a href="#" class="admin-nav-link" data-tab="statistics"><span>📈 Download Stats</span></a></li>
+      <li><a href="index.html" class="admin-nav-link" target="_blank"><span>🌐 View Website</span></a></li>
+      <li><a href="#" class="admin-nav-link logout-btn" style="color: var(--danger); margin-top: auto;"><span>🚪 Logout</span></a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="admin-main">
+    <header class="admin-header">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar">☰</button>
+        <h2>Administration Portal</h2>
+      </div>
+      <div class="admin-user-info">
+        <span class="admin-user-email" id="adminUserEmail">admin@labguard.com</span>
+        <button class="btn btn-secondary btn-sm logout-btn">Logout</button>
+      </div>
+    </header>
+
+    <div class="admin-content" id="adminDashboardContainer">
+
+      <!-- TAB 1: DASHBOARD -->
+      <section id="section-dashboard" class="admin-tab-section">
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card">
+            <h4>Total Releases</h4>
+            <div class="stat-value" id="statTotalReleases">0</div>
+          </div>
+          <div class="admin-stat-card">
+            <h4>Published Releases</h4>
+            <div class="stat-value" id="statPublishedReleases">0</div>
+          </div>
+          <div class="admin-stat-card">
+            <h4>Latest Version</h4>
+            <div class="stat-value" id="statLatestVersion">v...</div>
+          </div>
+          <div class="admin-stat-card">
+            <h4>Total Downloads</h4>
+            <div class="stat-value" id="statTotalDownloads">0</div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Quick Actions</h3>
+          </div>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="document.querySelector('.admin-nav-link[data-tab=\'upload\']').click()">Upload New Release</button>
+            <button class="btn btn-secondary" onclick="document.querySelector('.admin-nav-link[data-tab=\'releases\']').click()">Manage Releases</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: RELEASES MANAGEMENT -->
+      <section id="section-releases" class="admin-tab-section" style="display: none;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Manage All Releases</h3>
+            <button class="btn btn-primary btn-sm" onclick="document.querySelector('.admin-nav-link[data-tab=\'upload\']').click()">+ Upload New</button>
+          </div>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Version</th>
+                  <th>Date</th>
+                  <th>Size</th>
+                  <th>Status</th>
+                  <th>Latest</th>
+                  <th>File Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminReleasesTableBody">
+                <tr><td colspan="7" style="text-align: center;">Loading releases...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: UPLOAD RELEASE -->
+      <section id="section-upload" class="admin-tab-section" style="display: none;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Upload New LABGUARD Release</h3>
+            <span class="badge" style="background: rgba(0, 242, 254, 0.15); color: var(--cyan-primary); border: 1px solid var(--cyan-primary); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem;">⚡ Zero-Block Guaranteed Upload</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Upload binary packages (.exe, .zip, .msi, etc.) or provide a direct download link. Files are immediately processed and made available for public user download.</p>
+
+          <form id="uploadReleaseForm">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+              <div class="form-group">
+                <label class="form-label" for="inputVersion">Version Number (e.g. 2.5.0)</label>
+                <input type="text" id="inputVersion" class="form-control" placeholder="2.5.0" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="inputReleaseDate">Release Date</label>
+                <input type="date" id="inputReleaseDate" class="form-control" required>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+              <div class="form-group">
+                <label class="form-label" for="inputMinVersion">Minimum Supported Version</label>
+                <input type="text" id="inputMinVersion" class="form-control" placeholder="2.0.0" value="2.0.0">
+              </div>
+
+              <div class="form-group" style="display: flex; align-items: center; gap: 2rem; padding-top: 1.8rem;">
+                <label class="form-checkbox-label">
+                  <input type="checkbox" id="inputIsPublished" checked> Publish immediately
+                </label>
+                <label class="form-checkbox-label">
+                  <input type="checkbox" id="inputIsLatest" checked> Mark as Latest Release
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="inputReleaseNotes">Release Notes Summary</label>
+              <textarea id="inputReleaseNotes" class="form-control" rows="3" placeholder="Major stability & security enhancements for labs." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="inputChangelog">Changelog Items (One per line)</label>
+              <textarea id="inputChangelog" class="form-control" rows="4" placeholder="- New system protection features&#10;- Improved lab management&#10;- Bug fixes" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Application File or Direct Download URL</label>
+              <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                <label class="form-label" for="inputDirectUrl" style="font-size: 0.9rem; margin-bottom: 0.5rem; display: block;">Option 1: Direct Download URL (Google Drive, Dropbox, GitHub, CDN, etc.)</label>
+                <input type="url" id="inputDirectUrl" class="form-control" placeholder="https://example.com/downloads/LABGUARD-Setup.exe">
+                <small style="color: var(--text-muted); display: block; margin-top: 0.3rem;">Leave empty if uploading a file below.</small>
+              </div>
+
+              <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                <label class="form-label" style="font-size: 0.9rem; margin-bottom: 0.5rem; display: block;">Option 2: Direct File Upload (Any file type: .exe, .zip, .msi, etc.)</label>
+                <div class="upload-dropzone" id="uploadDropzone" style="cursor: pointer;">
+                  <p>📁 Click or drag file here to upload directly</p>
+                  <p id="selectedFileName" style="margin-top: 0.5rem; color: var(--electric-blue); font-weight: 600;"></p>
+                  <input type="file" id="releaseFile" style="display: none;">
+                </div>
+              </div>
+            </div>
+
+            <div class="upload-progress-container" id="uploadProgressContainer" style="display: none;">
+              <p id="uploadProgressText" style="font-size: 0.85rem; font-weight: 600; color: var(--navy-deep);">Uploading... 0%</p>
+              <div class="progress-bar-wrapper">
+                <div class="progress-bar" id="uploadProgressBar"></div>
+              </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+              <button type="submit" class="btn btn-primary">Upload & Publish for User Download</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 4: DOWNLOAD STATISTICS -->
+      <section id="section-statistics" class="admin-tab-section" style="display: none;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Download Statistics & Analytics</h3>
+          </div>
+          <div id="downloadStatsContainer">
+            <p>Loading download statistics...</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/storage-db.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
