@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin-dashboard.html
+Disallow: /admin-login.html
+
+Sitemap: https://labguardsystems.vercel.app/sitemap.xml
